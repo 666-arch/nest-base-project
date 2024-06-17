@@ -1,15 +1,26 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/reagister.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
+  @Inject(JwtService)
+  private jwtService: JwtService;
   @Post('login')
-  login(@Body() user: LoginDto) {
-    console.log('user', user);
+  async login(@Body() user: LoginDto) {
+    const foundUser = await this.userService.login(user);
+    if (foundUser) {
+      const token = await this.jwtService.signAsync({
+        user: {
+          id: foundUser.id,
+          username: foundUser.username,
+        },
+      });
+
+    }
   }
   @Post('register')
   register(@Body() user: RegisterDto) {
