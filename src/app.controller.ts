@@ -13,6 +13,6 @@ export class AppController {
   @UseGuards(LoginGuard)
   @Get('aaa')
   foo() {
-    return 'token 验证成功';
+    return 'token 验证成功！';
   }
 }
