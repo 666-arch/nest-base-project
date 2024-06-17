@@ -19,7 +19,6 @@ export class UserController {
           username: foundUser.username,
         },
       });
-
     }
   }
   @Post('register')
