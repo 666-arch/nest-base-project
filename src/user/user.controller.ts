@@ -1,4 +1,11 @@
-import { Body, Controller, Inject, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Inject,
+  Post,
+  Res,
+  ValidationPipe,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/reagister.dto';
@@ -12,7 +19,7 @@ export class UserController {
   private jwtService: JwtService;
   @Post('login')
   async login(
-    @Body() user: LoginDto,
+    @Body(ValidationPipe) user: LoginDto,
     @Res({ passthrough: true }) res: Response,
   ) {
     const foundUser = await this.userService.login(user);
@@ -31,7 +38,7 @@ export class UserController {
     }
   }
   @Post('register')
-  register(@Body() user: RegisterDto) {
+  register(@Body(ValidationPipe) user: RegisterDto) {
     console.log(user);
     this.userService.register(user);
   }
